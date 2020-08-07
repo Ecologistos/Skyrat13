@@ -494,13 +494,13 @@
 				if(R)
 					. += "<span class='deptradio'>Rank:</span> [R.fields["rank"]]\n<a href='?src=[REF(src)];hud=1;photo_front=1'>\[Front photo\]</a><a href='?src=[REF(src)];hud=1;photo_side=1'>\[Side photo\]</a>"
 				if(istype(H.glasses, /obj/item/clothing/glasses/hud/health) || istype(CIH, /obj/item/organ/cyberimp/eyes/hud/medical))
-					var/cyberimp_detect
+					var/list/cyberimp_detect = list()
 					for(var/obj/item/organ/cyberimp/CI in internal_organs)
 						if(CI.status == ORGAN_ROBOTIC && !CI.syndicate_implant)
 							cyberimp_detect += "[name] is modified with a [CI.name]."
-					if(cyberimp_detect)
+					if(length(cyberimp_detect))
 						. += "Detected cybernetic modifications:"
-						. += cyberimp_detect
+						. += cyberimp_detect.Join("<BR>")
 					if(R)
 						var/health_r = R.fields["p_stat"]
 						. += "<a href='?src=[REF(src)];hud=m;p_stat=1'>\[[health_r]\]</a>"
@@ -597,8 +597,8 @@
 	for(var/i in show_descriptors_to(user))
 		msg |= "\t[i]"
 	if((src == user) && HAS_TRAIT(user, TRAIT_SCREWY_CHECKSELF))
-		msg |= "\t<span class='smallnotice'>[p_they(TRUE)] have no significantly damaged bodyparts.</span>"
-		msg |= "\t<span class='smallnotice'><i>[p_they(TRUE)] have no visible scars.</i></span>"
+		msg |= "\t<span class='smallnotice'>[p_they(TRUE)] [p_have()] no significantly damaged bodyparts.</span>"
+		msg |= "\t<span class='smallnotice'><i>[p_they(TRUE)] [p_have()] no visible scars.</i></span>"
 		return msg
 	
 	var/list/damaged_bodypart_text = list()
@@ -639,11 +639,11 @@
 			if(3)
 				styletext = "danger"
 		if(how_brute && how_burn)
-			text = "\t<span class='[styletext]'>[p_their(TRUE)] [BP] is [how_brute] and [how_burn][max_sev >= 2 ? "!" : "."]</span>"
+			text = "\t<span class='[styletext]'>[p_their(TRUE)] [BP.name] is [how_brute] and [how_burn][max_sev >= 2 ? "!" : "."]</span>"
 		else if(how_brute)
-			text = "\t<span class='[styletext]'>[p_their(TRUE)] [BP] is [how_brute][max_sev >= 2 ? "!" : "."]</span>"
+			text = "\t<span class='[styletext]'>[p_their(TRUE)] [BP.name] is [how_brute][max_sev >= 2 ? "!" : "."]</span>"
 		else if(how_burn)
-			text = "\t<span class='[styletext]'>[p_their(TRUE)] [BP] is [how_burn][max_sev >= 2 ? "!" : "."]</span>"
+			text = "\t<span class='[styletext]'>[p_their(TRUE)] [BP.name] is [how_burn][max_sev >= 2 ? "!" : "."]</span>"
 		
 		if(length(text))
 			damaged_bodypart_text |= text
@@ -651,7 +651,7 @@
 	msg |= damaged_bodypart_text
 
 	if(!length(damaged_bodypart_text))
-		msg |= "\t<span class='smallnotice'>[p_they(TRUE)] have no significantly damaged bodyparts.</span>"
+		msg |= "\t<span class='smallnotice'>[p_they(TRUE)] [p_have()] no significantly damaged bodyparts.</span>"
 	
 	var/list/visible_scars = list()
 	for(var/i in all_scars)
@@ -666,7 +666,7 @@
 			msg |= "\t[scar_text]"
 	
 	if(!length(visible_scars))
-		msg |= "\t<span class='smallnotice'><i>[p_they(TRUE)] have no visible scars.</i></span>"
+		msg |= "\t<span class='smallnotice'><i>[p_they(TRUE)] [p_have()] no visible scars.</i></span>"
 	
 	return msg
 //
