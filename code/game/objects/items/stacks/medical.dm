@@ -104,14 +104,10 @@
 					var/obj/item/bodypart/child = C.get_bodypart(bodypart)
 					if(!child)
 						continue
-					heal_carbon(C, user, brute, burn, FALSE, FALSE, child)
+					heal_carbon(C, user, brute, burn, TRUE, FALSE, child)
 					childcount++
 					if(childcount >= 2)
 						break
-			else if(affecting.parent_bodyzone)
-				var/obj/item/bodypart/parent = C.get_bodypart(affecting.parent_bodyzone)
-				if(parent)
-					heal_carbon(C, user, brute, burn, FALSE, FALSE, parent)
 		return TRUE
 	if(!silent)
 		to_chat(user, "<span class='warning'>[C]'s [affecting.name] can not be healed with \the [src]!</span>")
@@ -222,7 +218,7 @@
 			var/obj/item/bodypart/child = M.get_bodypart(bodypart)
 			if(!child)
 				continue
-			try_heal(M, user, silent, child)
+			try_heal(M, user, silent, child, TRUE)
 			childcount++
 			if(childcount >= 2)
 				break
